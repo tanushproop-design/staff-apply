@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Baku arena Staff Apply</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #050505, #141414);
+    color: white;
+}
+
+.container {
+    max-width: 480px;
+    margin: 60px auto;
+    padding: 25px;
+    background: #0f0f0f;
+    border-radius: 15px;
+    box-shadow: 0 0 25px red;
+}
+
+h1 {
+    text-align: center;
+    color: red;
+    text-shadow: 0 0 10px red;
+}
+
+p {
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+input, textarea, select, button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+}
+
+input, textarea, select {
+    background: #1f1f1f;
+    color: white;
+}
+
+textarea {
+    resize: none;
+    height: 90px;
+}
+
+button {
+    background: red;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: darkred;
+    box-shadow: 0 0 10px red;
+}
+
+.success {
+    text-align: center;
+    color: lightgreen;
+    margin-top: 10px;
+}
+
+.error {
+    text-align: center;
+    color: #ff4d4d;
+    margin-top: 10px;
+}
+
+.footer {
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.6;
+    margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Baku Arena Staff Application</h1>
+    <p>Fill the form to apply for staff</p>
+
+    <form id="staffForm">
+
+        <input type="text" name="name" placeholder="Your Name" required>
+
+        <input type="text" name="discord" placeholder="Discord Username">
+
+        <input type="number" name="age" placeholder="Your Age">
+
+        <select name="role" required>
+            <option value="">Select Role</option>
+            <option>Staff</option>
+            <option>Helper</option>
+        </select>
+
+        <textarea name="experience" placeholder="Your Experience"></textarea>
+
+        <textarea name="reason" placeholder="Why should we select you?"></textarea>
+
+        <button type="submit">Submit Application</button>
+    </form>
+
+    <div id="msg"></div>
+
+    <div class="footer">
+        © 2026 Staff Application
+    </div>
+</div>
+
+<script>
+(function () {
+    emailjs.init("JAPK3OlOfpo8ikIxc"); // 🔴 yahan apni PUBLIC KEY dalo
+})();
+
+document.getElementById("staffForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    emailjs.sendForm(
+        "service_5x5sv9b",   // 🔴 Service ID
+        "template_a5xoag8",  // 🔴 Template ID
+        this
+    ).then(function () {
+        document.getElementById("msg").innerHTML =
+            "<div class='success'>✅ Application sent successfully!</div>";
+        document.getElementById("staffForm").reset();
+    }, function () {
+        document.getElementById("msg").innerHTML =
+            "<div class='error'>❌ Error sending application. Try again.</div>";
+    });
+});
+</script>
+
+</body>
+</html>
