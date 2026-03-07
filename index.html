@@ -150,9 +150,11 @@
     </div>
 
     <script>
-      // ⚡ PASTE YOUR DISCORD WEBHOOK URL HERE ⚡
-      // Run >setupapply #channel in Discord to get the webhook URL
-      const WEBHOOK_URL = "https://discord.com/api/webhooks/1479944667519914005/IcdjtFImTHEbOxUXzI4syi1Zbn96F07TrcFN9MauZFjzJUyCn9d4TUVvpzey_Fmkbqqg";
+      // ⚡ BOT API URL ⚡
+      // Bot runs a web server — paste your bot's URL here
+      // Local: http://localhost:5000/apply
+      // Hosted: http://YOUR_VPS_IP:5000/apply
+      const API_URL = "http://localhost:5000/apply";
 
       document
         .getElementById("staffForm")
@@ -163,50 +165,34 @@
           btn.disabled = true;
           btn.textContent = "Sending...";
 
-          const name = this.name.value;
-          const discord = this.discord.value;
-          const age = this.age.value;
-          const role = this.role.value;
-          const experience = this.experience.value;
-          const reason = this.reason.value;
-
-          const embed = {
-            title: "📋 New Staff Application",
-            color: 0xff0000,
-            fields: [
-              { name: "👤 Name", value: name, inline: true },
-              { name: "🎮 Discord", value: discord, inline: true },
-              { name: "📅 Age", value: age, inline: true },
-              { name: "🎭 Role Applied", value: role, inline: true },
-              { name: "📝 Experience", value: experience || "Not provided", inline: false },
-              { name: "❓ Why Select", value: reason || "Not provided", inline: false }
-            ],
-            footer: { text: "Proof Bot | Staff Apply System" },
-            timestamp: new Date().toISOString()
+          const data = {
+            name: this.name.value,
+            discord: this.discord.value,
+            age: this.age.value,
+            role: this.role.value,
+            experience: this.experience.value,
+            reason: this.reason.value
           };
 
-          fetch(WEBHOOK_URL, {
+          fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              username: "Proof Staff Apply",
-              avatar_url: "https://cdn.discordapp.com/embed/avatars/0.png",
-              embeds: [embed]
-            })
+            body: JSON.stringify(data)
           })
-            .then(function (res) {
-              if (res.ok) {
+            .then(function (res) { return res.json(); })
+            .then(function (result) {
+              if (result.success) {
                 document.getElementById("msg").innerHTML =
                   "<div class='success'>✅ Application sent successfully!</div>";
                 document.getElementById("staffForm").reset();
               } else {
                 document.getElementById("msg").innerHTML =
-                  "<div class='error'>❌ Error sending application. Try again.</div>";
+                  "<div class='error'>❌ " + (result.message || "Error sending application.") + "</div>";
               }
             })
             .catch(function () {
               document.getElementById("msg").innerHTML =
-                "<div class='error'>❌ Network error. Try again.</div>";
+                "<div class='error'>❌ Bot is offline or not reachable. Try again later.</div>";
             })
             .finally(function () {
               btn.disabled = false;
